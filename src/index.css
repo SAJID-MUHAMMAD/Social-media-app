@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
+body {
+  @apply bg-[#f1f1f1];
+}
 .form-container {
   @apply w-[350px] h-[500px] bg-white shadow-[rgba(0,0,0,0.35)_0px_5px_15px] box-border px-8 py-5 rounded-[10px];
 }
@@ -52,4 +57,32 @@
 
 .sidenavbar-main .navbar_main ul .nav-item {
   @apply shadow-none;
+}
+
+.name {
+  @apply font-Inter font-semibold text-sm text-11175D;
+}
+
+.cardscrool::-webkit-scrollbar {
+  width: 10px;
+  @apply w-2;
+}
+
+/* Track */
+.cardscrool::-webkit-scrollbar-track {
+  @apply bg-[#f1f1f1] rounded-xl;
+}
+
+/* Handle */
+.cardscrool::-webkit-scrollbar-thumb {
+  @apply bg-brand rounded-xl;
+}
+
+/* Handle on hover */
+.cardscrool::-webkit-scrollbar-thumb:hover {
+  background: #b30000;
+}
+
+.sidebar-wraper .sidebar-arrow {
+  @apply hidden;
 }

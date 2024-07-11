@@ -5,10 +5,10 @@ const Registration = () => {
   return (
     <section className="h-screen flex items-center justify-center">
       <div className="form-container">
-        <p className=" text-lg font-bold pb-3 ">
+        <p className=" text-lg text-center font-bold pb-3 ">
           Get started with easily register
         </p>
-        <p className="font-normal text-base pb-12">
+        <p className="font-normal text-xs text-center pb-12">
           Free register and you can enjoy it
         </p>
         <form className="form">

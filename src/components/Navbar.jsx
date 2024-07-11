@@ -13,17 +13,17 @@ import { IoChatbubbleEllipses } from "react-icons/io5";
 
 const Navbar = () => {
   return (
-    <SideNavbar style={{ width: "250px", background: "white" }}>
+    <SideNavbar style={{ width: "200px", background: "white" }}>
       <NavbarBrand>
-        <a href="/" style={{ fontSize: "30px", fontWeight: "700" }}>
-          Community
-        </a>
+        <Link to="/" className=" text-3xl font-Inter font-bold">
+          ChatApp
+        </Link>
       </NavbarBrand>
       <MenuBar>
         <NavItem>
           <Link
-            to="/home"
-            className="bg-[#32375C] text-white py-3 px-10 w-fit items-center rounded-xl"
+            to="/"
+            className="bg-brand text-white py-3 px-10 w-fit items-center rounded-xl"
           >
             <IoMdHome />
 
@@ -32,7 +32,7 @@ const Navbar = () => {
         </NavItem>
         <NavItem>
           <Link
-            to="/home"
+            to="/chat"
             className=" py-3 px-10 w-fit items-center rounded-xl"
           >
             <IoChatbubbleEllipses />
