@@ -1,8 +1,12 @@
 import { IoMdMore } from "react-icons/io";
+import { IoSend } from "react-icons/io5";
+import { GrEmoji } from "react-icons/gr";
+import { FaRegImage } from "react-icons/fa";
+import { IoMicOutline } from "react-icons/io5";
 
 const ChatArea = () => {
   return (
-    <div className="bg-white rounded-r-xl overflow-hidden border-l">
+    <div className="bg-white h-full rounded-r-xl overflow-hidden border-l flex flex-col pb-2">
       <div className="pt-12 pb-3 px-3 flex items-center gap-4 shadow-md">
         <div>
           <img src="/friend.png" alt="friend" />
@@ -23,6 +27,28 @@ const ChatArea = () => {
         </p>
       </div>
       {/* chat area end */}
+
+      <div className=" mt-auto mx-2 bg-[#F4F4F4] border flex justify-between items-center rounded-md">
+        <textarea
+          type="text"
+          placeholder="text here"
+          className=" w-4/5 max-h-20 h-10 p-1 bg-transparent focus:outline-none"
+        />
+        <div className="flex gap-2 mr-2">
+          <button>
+            <GrEmoji className="text-lg text-brand" />
+          </button>
+          <button>
+            <FaRegImage className="text-lg text-brand" />
+          </button>
+          <button>
+            <IoMicOutline className="text-lg text-brand" />
+          </button>
+          <button>
+            <IoSend className="text-lg text-brand" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

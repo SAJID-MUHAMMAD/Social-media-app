@@ -7,11 +7,13 @@ import {
   Contact,
 } from "responsive-navigation";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { IoMdHome } from "react-icons/io";
 import { IoChatbubbleEllipses } from "react-icons/io5";
 
 const Navbar = () => {
+  const location = useLocation();
+  const path = location.pathname;
   return (
     <SideNavbar style={{ width: "200px", background: "white" }}>
       <NavbarBrand>
@@ -23,7 +25,9 @@ const Navbar = () => {
         <NavItem>
           <Link
             to="/"
-            className="bg-brand text-white py-3 px-10 w-fit items-center rounded-xl"
+            className={`${
+              path === "/" ? "bg-brand text-white" : "bg-white text-brand"
+            }  py-3 px-10 w-fit items-center rounded-xl`}
           >
             <IoMdHome />
 
@@ -33,7 +37,9 @@ const Navbar = () => {
         <NavItem>
           <Link
             to="/chat"
-            className=" py-3 px-10 w-fit items-center rounded-xl"
+            className={`${
+              path === "/chat" ? "bg-brand text-white" : "bg-white text-brand"
+            }  py-3 px-10 w-fit items-center rounded-xl`}
           >
             <IoChatbubbleEllipses />
 
@@ -42,14 +48,19 @@ const Navbar = () => {
         </NavItem>
       </MenuBar>
       <Contact>
-        <div className="flex items-center gap-2">
+        <Link
+          to="/profile"
+          className={` w-full flex justify-center py-2 rounded-lg items-center gap-2 ${
+            path === "/profile" && "bg-brand text-white"
+          }`}
+        >
           <FaRegUserCircle className="text-2xl" />
 
           <p className="flex flex-col text-xl">
             <span> Paula Mora</span>
             <span>Edit Profile</span>
           </p>
-        </div>
+        </Link>
       </Contact>
     </SideNavbar>
   );
