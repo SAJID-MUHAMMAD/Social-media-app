@@ -1,8 +1,18 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+} from "firebase/auth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Registration = () => {
+  const auth = getAuth();
+
   const [passShow, setPassShow] = useState(false);
   const [user, setUser] = useState({
     name: "",
@@ -25,18 +35,61 @@ const Registration = () => {
       setUserErr({ ...userErr, emailErr: "Email is required!" });
     } else if (!user.password) {
       setUserErr({ ...userErr, passwordErr: "Password is required!" });
-    } else if (!re.test(user.password)) {
-      setUserErr({
-        ...userErr,
-        passwordErr:
-          "password should contain atleast one number and one special character.",
-      });
-    } else {
-      console.log("Success", user);
+    }
+    //  else if (!re.test(user.password)) {
+    //   setUserErr({
+    //     ...userErr,
+    //     passwordErr:
+    //       "password should contain atleast one number and one special character.",
+    //   });
+    // }
+    else {
+      createUserWithEmailAndPassword(auth, user.email, user.password)
+        .then((res) => {
+          updateProfile(auth.currentUser, {
+            displayName: user.name,
+            photoURL: "/user.png",
+          })
+            .then(() => {
+              sendEmailVerification(auth.currentUser).then(() => {
+                setUser({
+                  name: "",
+                  email: "",
+                  password: "",
+                });
+                toast.success(
+                  "Registration Successfull, Please Verify your email!"
+                );
+                console.log(res.user);
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((error) => {
+          if (error.code == "auth/weak-password") {
+            setUserErr({
+              ...userErr,
+              passwordErr: "Password should be at least 6 characters.",
+            });
+          } else if (error.code == "auth/invalid-email") {
+            setUserErr({ ...userErr, emailErr: "Ivalid Email Address!" });
+          } else if (error.code == "auth/email-already-in-use") {
+            setUserErr({ ...userErr, emailErr: "Email Already in Use!" });
+          } else {
+            console.log(error.code);
+          }
+        });
     }
   };
   return (
     <section className="h-screen flex items-center justify-center">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        theme="light"
+      ></ToastContainer>
       <div className="form-container">
         <p className=" text-lg text-center font-bold pb-3 ">
           Get started with easily register
@@ -50,6 +103,7 @@ const Registration = () => {
               setUser({ ...user, name: e.target.value });
               setUserErr("");
             }}
+            value={user.name}
             type="text"
             className="input"
             placeholder="Full Name"
@@ -60,6 +114,7 @@ const Registration = () => {
               setUser({ ...user, email: e.target.value });
               setUserErr("");
             }}
+            value={user.email}
             type="email"
             className="input"
             placeholder="Email"
@@ -73,6 +128,7 @@ const Registration = () => {
                 setUser({ ...user, password: e.target.value });
                 setUserErr("");
               }}
+              value={user.password}
               type={passShow ? "text" : "password"}
               className="input w-full"
               placeholder="Password"
@@ -80,12 +136,12 @@ const Registration = () => {
             {passShow ? (
               <IoMdEye
                 onClick={() => setPassShow(false)}
-                className=" absolute top-1/2 right-5 -translate-y-1/2 cursor-pointer"
+                className=" absolute top-1/2 right-5 -translate-y-1/2 cursor-pointer text-xl"
               />
             ) : (
               <IoMdEyeOff
                 onClick={() => setPassShow(true)}
-                className=" absolute top-1/2 right-5 -translate-y-1/2 cursor-pointer"
+                className=" absolute top-1/2 right-5 -translate-y-1/2 cursor-pointer text-xl"
               />
             )}
           </div>
