@@ -6,13 +6,15 @@ import {
   NavItem,
   Contact,
 } from "responsive-navigation";
-import { FaRegUserCircle } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { IoMdHome } from "react-icons/io";
 import { IoChatbubbleEllipses } from "react-icons/io5";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const location = useLocation();
+
+  const loggedUser = useSelector((state) => state.loggedUser.user);
   const path = location.pathname;
   return (
     <SideNavbar style={{ width: "200px", background: "white" }}>
@@ -54,10 +56,12 @@ const Navbar = () => {
             path === "/profile" && "bg-brand text-white"
           }`}
         >
-          <FaRegUserCircle className="text-2xl" />
+          <div className="w-12 rounded-full overflow-hidden">
+            <img src={loggedUser?.photoURL} alt="profile" className="w-full" />
+          </div>
 
           <p className="flex flex-col text-xl">
-            <span> Paula Mora</span>
+            <span> {loggedUser?.displayName} </span>
             <span>Edit Profile</span>
           </p>
         </Link>

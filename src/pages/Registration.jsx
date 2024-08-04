@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import {
   getAuth,
@@ -9,11 +9,13 @@ import {
 } from "firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { PropagateLoader } from "react-spinners";
 
 const Registration = () => {
   const auth = getAuth();
-
+  const navigate = useNavigate();
   const [passShow, setPassShow] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -44,6 +46,7 @@ const Registration = () => {
     //   });
     // }
     else {
+      setLoading(true);
       createUserWithEmailAndPassword(auth, user.email, user.password)
         .then((res) => {
           updateProfile(auth.currentUser, {
@@ -57,10 +60,13 @@ const Registration = () => {
                   email: "",
                   password: "",
                 });
+                setLoading(false);
                 toast.success(
                   "Registration Successfull, Please Verify your email!"
                 );
-                console.log(res.user);
+                setTimeout(() => {
+                  navigate("/login");
+                }, 2000);
               });
             })
             .catch((err) => {
@@ -68,6 +74,7 @@ const Registration = () => {
             });
         })
         .catch((error) => {
+          setLoading(false);
           if (error.code == "auth/weak-password") {
             setUserErr({
               ...userErr,
@@ -148,8 +155,16 @@ const Registration = () => {
           {userErr.passwordErr && (
             <p className="text-red-500">{userErr.passwordErr}</p>
           )}
-          <button onClick={handelSubmit} className="form-btn">
-            Registration
+          <button
+            onClick={handelSubmit}
+            disabled={loading}
+            className="form-btn"
+          >
+            {loading ? (
+              <PropagateLoader color="white" className="h-6 pt-1" />
+            ) : (
+              "Registration"
+            )}
           </button>
         </div>
         <p className="sign-up-label">
