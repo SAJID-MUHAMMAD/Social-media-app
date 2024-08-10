@@ -1,16 +1,25 @@
 import { FcGoogle } from "react-icons/fc";
 import { json, Link, useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
+import { useEffect, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { toast, ToastContainer } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loggedUserData } from "../reducer/userSlice";
 
 const Login = () => {
+  const loggedUser = useSelector((state) => state.loggedUser.user);
   const navigate = useNavigate();
   const auth = getAuth();
+  const db = getDatabase();
   const dispatch = useDispatch();
+  const provider = new GoogleAuthProvider();
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -22,6 +31,7 @@ const Login = () => {
   });
 
   const [passShow, setPassShow] = useState(false);
+
   const handelLogin = () => {
     if (!user.email) {
       setUserErr({ ...userErr, emailErr: "Email is required!" });
@@ -31,11 +41,21 @@ const Login = () => {
       signInWithEmailAndPassword(auth, user.email, user.password)
         .then((res) => {
           if (res.user.emailVerified) {
-            dispatch(loggedUserData(res.user));
-            toast.success("Login Successfull!");
-            setTimeout(() => {
-              navigate("/");
-            }, 2000);
+            set(ref(db, "users/" + res.user.uid), {
+              displayName: res.user.displayName,
+              email: res.user.email,
+              photoURL: res.user.photoURL,
+            })
+              .then(() => {
+                dispatch(loggedUserData(res.user));
+                toast.success("Login Successfull!");
+                setTimeout(() => {
+                  navigate("/");
+                }, 2000);
+              })
+              .catch((err) => {
+                console.log(err.message);
+              });
           } else {
             toast.error("Please Verify Your Email!");
           }
@@ -50,6 +70,35 @@ const Login = () => {
         });
     }
   };
+  const handelGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((res) => {
+        set(ref(db, "users/" + res.user.uid), {
+          displayName: res.user.displayName,
+          email: res.user.email,
+          photoURL: res.user.photoURL,
+        })
+          .then(() => {
+            dispatch(loggedUserData(res.user));
+            toast.success("Login Successfull!");
+            setTimeout(() => {
+              navigate("/");
+            }, 2000);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
+      })
+      .catch((error) => {
+        console.log(error.code);
+        console.log(error.message);
+      });
+  };
+  useEffect(() => {
+    if (loggedUser) {
+      navigate("/");
+    }
+  }, []);
   return (
     <section className="h-screen flex items-center justify-center">
       <div className="form-container">
@@ -113,7 +162,7 @@ const Login = () => {
           </Link>
         </p>
         <div className="buttons-container">
-          <div className="google-login-button">
+          <div onClick={handelGoogle} className="google-login-button">
             <FcGoogle className="text-2xl" />
 
             <span>Log in with Google</span>

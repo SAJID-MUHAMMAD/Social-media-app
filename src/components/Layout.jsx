@@ -6,11 +6,16 @@ import { useSelector } from "react-redux";
 const Layout = () => {
   const navigate = useNavigate();
   const loggedUser = useSelector((state) => state.loggedUser.user);
-  if (!loggedUser) {
-    useEffect(() => {
+  // if (!loggedUser) {
+  //   useEffect(() => {
+  //     navigate("/login");
+  //   }, []);
+  // }
+  useEffect(() => {
+    if (!loggedUser) {
       navigate("/login");
-    }, []);
-  }
+    }
+  }, []);
   return (
     <>
       <Navbar />

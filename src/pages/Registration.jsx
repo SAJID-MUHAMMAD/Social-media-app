@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import {
@@ -10,10 +10,13 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PropagateLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
 const Registration = () => {
   const auth = getAuth();
   const navigate = useNavigate();
+  const loggedUser = useSelector((state) => state.loggedUser.user);
+
   const [passShow, setPassShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
@@ -90,6 +93,11 @@ const Registration = () => {
         });
     }
   };
+  useEffect(() => {
+    if (loggedUser) {
+      navigate("/");
+    }
+  }, []);
   return (
     <section className="h-screen flex items-center justify-center">
       <ToastContainer
