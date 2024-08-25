@@ -10,18 +10,16 @@ import {
   ref,
   uploadString,
 } from "firebase/storage";
-import {
-  getDatabase,
-  ref as dataref,
-  child,
-  push,
-  update,
-} from "firebase/database";
+import { getDatabase, ref as dataref, update } from "firebase/database";
+import { getAuth, updateProfile } from "firebase/auth";
+
 import { loggedUserData } from "../reducer/userSlice";
 import { toast, ToastContainer } from "react-toastify";
 import { PulseLoader } from "react-spinners";
 
 const Profile = () => {
+  const auth = getAuth();
+
   const loggedUser = useSelector((state) => state.loggedUser.user);
   const storage = getStorage();
   const db = getDatabase();
@@ -64,11 +62,17 @@ const Profile = () => {
           update(dataref(db, "users/" + loggedUser.uid), {
             photoURL: downloadURL,
           }).then(() => {
-            dispatch(loggedUserData({ ...loggedUser, photoURL: downloadURL }));
-            setImage("");
-            setCropData("");
-            toast.success("Profile Picture Uploaded");
-            setLoading(false);
+            updateProfile(auth.currentUser, {
+              photoURL: downloadURL,
+            }).then(() => {
+              dispatch(
+                loggedUserData({ ...loggedUser, photoURL: downloadURL })
+              );
+              setImage("");
+              setCropData("");
+              toast.success("Profile Picture Uploaded");
+              setLoading(false);
+            });
           });
         });
       }

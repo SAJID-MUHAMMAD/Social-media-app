@@ -8,15 +8,15 @@ import Users from "../components/Users";
 const Home = () => {
   return (
     <div className="">
-      <div className="flex gap-5 py-10 ">
-        <MyGroup />
-        <AllGroup />
-        <Friends />
-      </div>
       <div className="flex gap-5 py-10">
         <Users />
         <FriendRequest />
         <BlockList />
+      </div>
+      <div className="flex gap-5 py-10 ">
+        <MyGroup />
+        <AllGroup />
+        <Friends />
       </div>
     </div>
   );
