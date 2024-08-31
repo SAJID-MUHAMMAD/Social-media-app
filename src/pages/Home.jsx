@@ -11,12 +11,12 @@ const Home = () => {
       <div className="flex gap-5 py-10">
         <Users />
         <FriendRequest />
-        <BlockList />
+        <Friends />
       </div>
       <div className="flex gap-5 py-10 ">
         <MyGroup />
         <AllGroup />
-        <Friends />
+        <BlockList />
       </div>
     </div>
   );
