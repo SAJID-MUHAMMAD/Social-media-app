@@ -24,6 +24,7 @@ const MyGroup = () => {
         groupName: groupName,
         groupImg: "/user.png",
         createBy: loggedUser.uid,
+        creatorName: loggedUser.displayName,
       }).then(() => {
         setOpen(false);
         setGroupName("");
