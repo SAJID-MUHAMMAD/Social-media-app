@@ -43,6 +43,7 @@ const MyGroup = () => {
       setGroupList(arr);
     });
   }, []);
+
   return (
     <div className="w-1/3 h-[500px] bg-white p-4 rounded-xl relative">
       <ToastContainer

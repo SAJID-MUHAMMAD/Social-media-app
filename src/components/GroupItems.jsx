@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import { IoMdMore } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { GiCrossMark } from "react-icons/gi";
-import { getDatabase, onValue, push, ref, set } from "firebase/database";
+import {
+  getDatabase,
+  onValue,
+  push,
+  ref,
+  remove,
+  set,
+} from "firebase/database";
 
 const GroupItems = ({ data }) => {
   const loggedUser = useSelector((state) => state.loggedUser.user);
@@ -33,7 +40,6 @@ const GroupItems = ({ data }) => {
       setGroupMemberList(arr);
     });
   }, []);
-  console.log(groupMemberList);
 
   const handelAddToGroup = (userdata) => {
     set(
@@ -45,7 +51,9 @@ const GroupItems = ({ data }) => {
       })
     );
   };
-
+  const handelDeleteGroup = () => {
+    remove(ref(db, "groups/" + data.key));
+  };
   return (
     <div className="flex items-center gap-4 mb-4 ">
       <div className="w-10 h-10 rounded-full overflow-hidden">
@@ -76,7 +84,10 @@ const GroupItems = ({ data }) => {
               onClick={() => setOpen(false)}
               className="absolute top-4 right-4 text-xl text-white hover:text-red-600 duration-300 cursor-pointer"
             />
-            <button className=" hover:text-white bg-white py-4 px-8 rounded-xl duration-300 hover:bg-red-500">
+            <button
+              onClick={handelDeleteGroup}
+              className=" hover:text-white bg-white py-4 px-8 rounded-xl duration-300 hover:bg-red-500"
+            >
               Delete
             </button>
             <button
