@@ -23,7 +23,7 @@ const MyGroup = () => {
       push(ref(db, "groups/"), {
         groupName: groupName,
         groupImg: "/user.png",
-        createBy: loggedUser.uid,
+        createdBy: loggedUser.uid,
         creatorName: loggedUser.displayName,
       }).then(() => {
         setOpen(false);
@@ -36,7 +36,7 @@ const MyGroup = () => {
     let arr = [];
     onValue(ref(db, "groups/"), (snapshot) => {
       snapshot.forEach((item) => {
-        if (item.val().createBy === loggedUser.uid) {
+        if (item.val().createdBy === loggedUser.uid) {
           arr.push({ ...item.val(), key: item.key });
         }
       });

@@ -46,8 +46,10 @@ const GroupItems = ({ data }) => {
       push(ref(db, "groupMembers/"), {
         groupId: data.key,
         groupName: data.groupName,
+        groupImg: data.groupImg,
         memberName: userdata.displayName,
         memberId: userdata.key,
+        createdBy: data.createdBy,
       })
     );
   };
@@ -63,10 +65,10 @@ const GroupItems = ({ data }) => {
         <h3 className="name">{data?.groupName}</h3>
         <p>
           Admin :
-          {loggedUser.uid === data.createBy ? "You" : `${data.creatorName}`}
+          {loggedUser.uid === data.createdBy ? "You" : `${data.creatorName}`}
         </p>
       </div>
-      {loggedUser.uid === data.createBy ? (
+      {loggedUser.uid === data.createdBy ? (
         <IoMdMore
           className="ml-auto text-2xl cursor-pointer"
           onClick={() => setOpen(true)}

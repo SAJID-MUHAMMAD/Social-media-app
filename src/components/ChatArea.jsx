@@ -35,7 +35,7 @@ const ChatArea = () => {
           mail: message,
           senderId: loggedUser.uid,
           senderName: loggedUser.displayName,
-          reciverId: activeChat.key,
+          groupId: activeChat.key,
           type: "group",
         }).then(() => {
           setMessage("");
@@ -59,7 +59,7 @@ const ChatArea = () => {
           }
         } else if (item.val().type === "group") {
           if (
-            item.val().reciverId === activeChat.key ||
+            item.val().groupId === activeChat.key ||
             item.val().senderId === loggedUser.uid
           ) {
             arr.push({ ...item.val(), key: item.key });
