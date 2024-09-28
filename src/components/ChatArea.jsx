@@ -35,7 +35,7 @@ const ChatArea = () => {
           mail: message,
           senderId: loggedUser.uid,
           senderName: loggedUser.displayName,
-          groupId: activeChat.key,
+          groupId: activeChat.groupId,
           type: "group",
         }).then(() => {
           setMessage("");
@@ -48,27 +48,24 @@ const ChatArea = () => {
     let arr = [];
     onValue(ref(db, "allchat/"), (snapshot) => {
       snapshot.forEach((item) => {
-        if (item.val().type === "single") {
+        if (activeType === "single") {
           if (
             (item.val().reciverId === loggedUser.uid ||
               item.val().senderId === loggedUser.uid) &
-              (item.val().reciverId === activeChat.friendId) ||
-            item.val().senderId === activeChat.friendId
+            (item.val().reciverId === activeChat?.friendId ||
+              item.val().senderId === activeChat?.friendId)
           ) {
             arr.push({ ...item.val(), key: item.key });
           }
-        } else if (item.val().type === "group") {
-          if (
-            item.val().groupId === activeChat.key ||
-            item.val().senderId === loggedUser.uid
-          ) {
+        } else if (activeType === "group" && item.val().type === "group") {
+          if (item.val().groupId === activeChat.groupId) {
             arr.push({ ...item.val(), key: item.key });
           }
         }
       });
       setMessageList(arr);
     });
-  }, [activeChat.friendId || activeChat.key]);
+  }, [activeChat?.key]);
 
   return (
     <div className="bg-white h-full rounded-r-xl overflow-hidden border-l flex flex-col pb-2">
@@ -89,9 +86,7 @@ const ChatArea = () => {
         <h3 className="name">
           {activeType === "single"
             ? activeChat?.friendName
-            : activeType === "group"
-            ? activeChat?.groupName
-            : "No User"}
+            : activeType === "group" && activeChat?.groupName}
         </h3>
         <IoMdMore className="ml-auto" />
       </div>
@@ -99,16 +94,29 @@ const ChatArea = () => {
       {/* chat area start */}
       <div className="p-5 flex flex-col gap-3">
         {messageList.map((item) =>
-          item.senderId === loggedUser.uid ? (
-            <p className="bg-brand text-white p-2 rounded-lg w-fit text-base font-Inter ml-auto max-w-[60%]">
-              {item.mail}
-            </p>
+          item.type === "single" ? (
+            item.senderId === loggedUser.uid ? (
+              <p className="bg-brand text-white p-2 rounded-lg w-fit text-base font-Inter ml-auto max-w-[60%]">
+                {item.mail}
+              </p>
+            ) : (
+              item.reciverId === loggedUser.uid && (
+                <p className="bg-[#E9E9E9] p-2 rounded-lg w-fit text-base font-Inter max-w-[60%]">
+                  {item.mail}
+                </p>
+              )
+            )
           ) : (
-            item.reciverId === loggedUser.uid && (
+            item.type === "group" &&
+            (item.senderId === loggedUser.uid ? (
+              <p className="bg-brand text-white p-2 rounded-lg w-fit text-base font-Inter ml-auto max-w-[60%]">
+                {item.mail}
+              </p>
+            ) : (
               <p className="bg-[#E9E9E9] p-2 rounded-lg w-fit text-base font-Inter max-w-[60%]">
                 {item.mail}
               </p>
-            )
+            ))
           )
         )}
       </div>

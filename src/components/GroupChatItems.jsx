@@ -11,10 +11,10 @@ export const GroupChatItems = ({ data }) => {
       className="flex items-center gap-4 mb-4"
     >
       <div className="w-10 h-10 rounded-full overflow-hidden">
-        <img src={data.groupImg} alt="friend" />
+        <img src={data?.groupImg} alt="friend" />
       </div>
       <div>
-        <h3 className="name">{data.groupName}</h3>
+        <h3 className="name">{data?.groupName}</h3>
       </div>
       <button className="ml-auto font-Inter text-sm font-normal text-brand">
         10:30 PM
