@@ -28,8 +28,8 @@ const Navbar = () => {
   return (
     <SideNavbar style={{ width: "200px", background: "white" }}>
       <NavbarBrand>
-        <Link to="/" className=" text-3xl font-Inter font-bold">
-          ChatApp
+        <Link to="/" className=" text-3xl font-Inter font-bold ">
+          ChatNest
         </Link>
       </NavbarBrand>
       <MenuBar>
