@@ -61,7 +61,6 @@ const Login = () => {
           }
         })
         .catch((err) => {
-          console.log(err.code);
           if (err.code == "auth/invalid-email") {
             setUserErr({ ...userErr, emailErr: "Ivalid Email Address!" });
           } else if (err.code == "auth/invalid-credential") {

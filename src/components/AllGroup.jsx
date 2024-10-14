@@ -11,8 +11,8 @@ const AllGroup = () => {
   const loggedUser = useSelector((state) => state.loggedUser.user);
 
   useEffect(() => {
-    let arr = [];
     onValue(ref(db, "groups/"), (snapshot) => {
+      let arr = [];
       snapshot.forEach((item) => {
         arr.push({ ...item.val(), key: item.key });
       });

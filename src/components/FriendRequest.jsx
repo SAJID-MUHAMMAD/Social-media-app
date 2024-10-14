@@ -10,8 +10,8 @@ const FriendRequest = () => {
 
   let [friendReqList, setFriendReqList] = useState([]);
   useEffect(() => {
-    let arr = [];
     onValue(ref(db, "friendReq/"), (snapshot) => {
+      let arr = [];
       snapshot.forEach((item) => {
         if (item.val().recciverId === loggedUser.uid) {
           arr.push({ ...item.val(), key: item.key });
