@@ -86,3 +86,10 @@ body {
 .sidebar-wraper .sidebar-arrow {
   @apply hidden;
 }
+
+.messageArea > div {
+  padding: 0 10px;
+}
+.messageArea > div::-webkit-scrollbar {
+  display: none;
+}

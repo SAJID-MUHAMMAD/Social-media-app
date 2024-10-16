@@ -6,6 +6,8 @@ import { IoMicOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { getDatabase, onValue, push, ref, set } from "firebase/database";
 import { useEffect, useState } from "react";
+import ScrollToBottom from "react-scroll-to-bottom";
+
 import {
   getDownloadURL,
   getStorage,
@@ -17,6 +19,7 @@ import EmojiPicker from "emoji-picker-react";
 const ChatArea = () => {
   const [message, setMessage] = useState("");
   const [chatImage, setChatImage] = useState("");
+  const [emojiToggle, setEmojiToggle] = useState(false);
   const [messageList, setMessageList] = useState([]);
   const activeChat = useSelector((state) => state.activeChat.active);
   const activeType = useSelector((state) => state.activeChat.active?.type);
@@ -24,11 +27,6 @@ const ChatArea = () => {
   const db = getDatabase();
   const storage = getStorage();
 
-  // const handelKey = (e) => {
-  //   if (e.key == "Enter") {
-  //     handelSendMsg();
-  //   }
-  // };
   const handelSendMsg = () => {
     if (activeType === "single") {
       const storageRef = imgRef(storage, `chatimg/${Date.now()}`);
@@ -61,6 +59,7 @@ const ChatArea = () => {
             type: "single",
           }).then(() => {
             setMessage("");
+            setEmojiToggle(false);
           })
         );
       }
@@ -74,6 +73,7 @@ const ChatArea = () => {
           type: "group",
         }).then(() => {
           setMessage("");
+          setEmojiToggle(false);
         })
       );
     }
@@ -130,20 +130,23 @@ const ChatArea = () => {
       </div>
 
       {/* chat area start */}
-      <div className="p-5 flex flex-col gap-3 overflow-y-scroll">
+      <ScrollToBottom
+        className={`${emojiToggle ? "h-[38px]" : "h-[74%]"} messageArea`}
+      >
+        {/* <div className="p-5 flex flex-col gap-3 overflow-y-scroll"> */}
         {messageList.map((item) =>
           item.type === "single" ? (
             item.senderId === loggedUser.uid ? (
               item.mail ? (
                 <p
                   key={item.key}
-                  className="bg-brand text-white p-2 rounded-lg w-fit text-base font-Inter ml-auto max-w-[60%]"
+                  className="bg-brand text-white p-2 rounded-lg w-fit text-base font-Inter ml-auto max-w-[60%] my-2"
                 >
                   {item.mail}
                 </p>
               ) : (
                 item.imageMsg && (
-                  <div key={item.key} className=" ml-auto w-24 ">
+                  <div key={item.key} className=" ml-auto w-24 my-2">
                     <img className="w-full" src={item.imageMsg}></img>
                   </div>
                 )
@@ -153,13 +156,13 @@ const ChatArea = () => {
               (item.mail ? (
                 <p
                   key={item.key}
-                  className="bg-[#E9E9E9] p-2 rounded-lg w-fit text-base font-Inter max-w-[60%]"
+                  className="bg-[#E9E9E9] p-2 rounded-lg w-fit text-base font-Inter max-w-[60%] my-2"
                 >
                   {item.mail}
                 </p>
               ) : (
                 item.imageMsg && (
-                  <div key={item.key} className=" w-24 ">
+                  <div key={item.key} className=" w-24 my-2">
                     <img className="w-full" src={item.imageMsg}></img>
                   </div>
                 )
@@ -184,7 +187,8 @@ const ChatArea = () => {
             ))
           )
         )}
-      </div>
+        {/* </div> */}
+      </ScrollToBottom>
       {/* chat area end */}
 
       <div className=" mx-2 bg-[#F4F4F4] flex justify-between items-center rounded-md relative">
@@ -198,7 +202,10 @@ const ChatArea = () => {
         />
         <div className="flex gap-2 mr-2">
           <button>
-            <GrEmoji className="text-lg text-brand" />
+            <GrEmoji
+              onClick={() => setEmojiToggle(!emojiToggle)}
+              className="text-lg text-brand"
+            />
           </button>
 
           {/* ============ */}
@@ -241,7 +248,7 @@ const ChatArea = () => {
       <div>
         <EmojiPicker
           height={335}
-          // open={emojiToggle}
+          open={emojiToggle}
           style={{ width: "100%" }}
           onEmojiClick={handelEmoji}
         />
