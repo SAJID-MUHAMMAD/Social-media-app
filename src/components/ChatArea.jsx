@@ -217,6 +217,7 @@ const ChatArea = () => {
             type="file"
             id="image"
             className="hidden"
+            accept="image/png, image/gif, image/jpg"
           />
           {chatImage && (
             <div className="absolute left-0 bottom-full border-2 w-20">

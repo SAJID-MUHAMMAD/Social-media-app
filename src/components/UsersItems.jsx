@@ -1,5 +1,12 @@
 import { useSelector } from "react-redux";
-import { getDatabase, onValue, push, ref, set } from "firebase/database";
+import {
+  getDatabase,
+  onValue,
+  push,
+  ref,
+  remove,
+  set,
+} from "firebase/database";
 import { useEffect, useState } from "react";
 
 const UsersItems = ({ data }) => {
@@ -9,6 +16,15 @@ const UsersItems = ({ data }) => {
   const [blockList, setBlockList] = useState([]);
 
   const loggedUser = useSelector((state) => state.loggedUser.user);
+
+  // const handelCancel = () => {
+  //   onValue(ref(db, "friendReq/"), (snapshot) => {
+  //     snapshot.forEach((item) => {
+  //       remove(ref(db, "/friendReq" + item.val()));
+  //     });
+  //   });
+  //   console.log(item.val());
+  // };
 
   const handelReq = () => {
     set(
@@ -23,9 +39,10 @@ const UsersItems = ({ data }) => {
       })
     );
   };
+
   useEffect(() => {
-    let arr = [];
     onValue(ref(db, "friendReq/"), (snapshot) => {
+      let arr = [];
       snapshot.forEach((item) => {
         if (
           item.val().senderId === loggedUser.uid ||
@@ -39,8 +56,8 @@ const UsersItems = ({ data }) => {
   }, []);
 
   useEffect(() => {
-    let arr = [];
     onValue(ref(db, "friendList/"), (snapshot) => {
+      let arr = [];
       snapshot.forEach((item) => {
         if (
           item.val().senderId === loggedUser.uid ||
@@ -54,8 +71,8 @@ const UsersItems = ({ data }) => {
   }, []);
 
   useEffect(() => {
-    let arr = [];
     onValue(ref(db, "blockList/"), (snapshot) => {
+      let arr = [];
       snapshot.forEach((item) => {
         if (
           item.val().blockedById === loggedUser.uid ||
@@ -76,7 +93,10 @@ const UsersItems = ({ data }) => {
         <h3 className="name">{data?.displayName}</h3>
       </div>
       {friendReqList.includes(loggedUser.uid + data.key) ? (
-        <button className="ml-auto font-Inter text-lg font-normal text-brand">
+        <button
+          // onClick={handelCancel}
+          className="ml-auto font-Inter text-lg font-normal text-brand"
+        >
           Cancel
         </button>
       ) : friendReqList.includes(data.key + loggedUser.uid) ? (

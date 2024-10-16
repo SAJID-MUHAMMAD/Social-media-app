@@ -9,6 +9,7 @@ const FriendRequest = () => {
   const loggedUser = useSelector((state) => state.loggedUser.user);
 
   let [friendReqList, setFriendReqList] = useState([]);
+
   useEffect(() => {
     onValue(ref(db, "friendReq/"), (snapshot) => {
       let arr = [];
